@@ -1,4 +1,3 @@
-/cache/*
+*.pyc
 /data/*
-/projects/*
 /harmony_converters.egg-info
