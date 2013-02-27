@@ -3,7 +3,6 @@
 
 
 import argparse
-import string
 import subprocess
 import sys
 import urllib2
@@ -17,22 +16,20 @@ Create a new database for an Harmony project.
 def generate_createdb_script(project_id, user):
     db_create_template = u"""
 set -xe
-createdb -E UTF8 -O ${user} -U ${user} -h localhost ${database}
-psql -U ${user} -h localhost -d ${database} -f ${postgis_sql}
-psql -U ${user} -h localhost -d ${database} -f ${spatial_ref_sys_sql}
-echo "ALTER TABLE geometry_columns OWNER TO ${user}; ALTER TABLE spatial_ref_sys OWNER TO ${user};" | \
-    psql -U ${user} -h localhost -d ${database}
+createdb -E UTF8 -O {user} -U {user} -h localhost {database}
+psql -U {user} -h localhost -d {database} -f {postgis_sql}
+psql -U {user} -h localhost -d {database} -f {spatial_ref_sys_sql}
+echo "ALTER TABLE geometry_columns OWNER TO {user}; ALTER TABLE spatial_ref_sys OWNER TO {user};" | \
+    psql -U {user} -h localhost -d {database}
 set +x
 """.strip()
-    template = string.Template(db_create_template)
-    mapping = {
-        'database': project_id,
-        'pg_hba': '/etc/postgresql/9.1/main/pg_hba.conf',
-        'postgis_sql': '/usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql',
-        'spatial_ref_sys_sql': '/usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql',
-        'user': user,
-        }
-    return template.substitute(mapping)
+    return db_create_template.format(
+        database=project_id,
+        pg_hba='/etc/postgresql/9.1/main/pg_hba.conf',
+        postgis_sql='/usr/share/postgresql/9.1/contrib/postgis-1.5/postgis.sql',
+        spatial_ref_sys_sql='/usr/share/postgresql/9.1/contrib/postgis-1.5/spatial_ref_sys.sql',
+        user=user,
+        )
 
 
 def main():
