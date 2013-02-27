@@ -6,53 +6,51 @@ import signal
 import subprocess
 
 
-scripts_base_dirname = os.path.join(os.path.dirname(__file__), '..', 'scripts')
+scripts_base_dir_name = os.path.join(os.path.dir_name(__file__), '..', 'scripts')
 
 
-def get_status(project_id, cache_dirname):
-    lock_file_path = os.path.join(cache_dirname, 'locks', project_id)
+def get_status(project_id, process_infos_dir_name):
+    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(project_id))
     if os.path.isfile(lock_file_path):
         return 'RUNNING'
     else:
-        status_file_path = os.path.join(cache_dirname, 'statuses', project_id)
-        if not os.path.isfile(status_file_path):
-            return 'Job not found'
-        status_file = open(status_file_path, 'r')
-        status = int(status_file.read().strip())
-        status_file.close()
-        if status == 0:
-            return 'COMPLETED'
-        return 'STOPPED'
+        return_code_file_path = os.path.join(process_infos_dir_name, u'{0}.returncode'.format(project_id))
+        if not os.path.isfile(return_code_file_path):
+            return 'NOT_FOUND'
+        with open(return_code_file_path, 'r') as return_code_file:
+            return_code = int(return_code_file.read().strip())
+        return 'COMPLETED' if return_code == 0 else 'ERROR'
 
 
-def kill(project_id, cache_dirname):
-    lock_file_path = os.path.join(cache_dirname, 'locks', project_id)
+def kill(project_id, process_infos_dir_name):
+    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(project_id))
     if not os.path.isfile(lock_file_path):
-        return 'Job not found'
+        return None
     with open(lock_file_path, 'r') as lock_file:
         pid = int(lock_file.read().strip())
     os.kill(pid, signal.SIGTERM)
     # Check if the process that we killed is alive.
     try:
-        os.kill(int(pid), 0)
-        raise Exception("wasn't able to kill the process {0} HINT:use signal.SIGKILL or signal.SIGABORT".format(pid))
-    except OSError as ex:
-        return 0
-    return 1
+        os.kill(pid, 0)
+        return False
+    except OSError:
+        os.unlink(lock_file_path)
+        return True
+    return None
 
 
-def start(job_name, project_id, callback_url, cache_dirname, *args):
-    job_script_filepath = os.path.join(scripts_base_dirname, '{0}.py'.format(job_name))
-    lock_file_path = os.path.join(cache_dirname, 'locks', project_id)
+def start(job_name, project_id, callback_url, process_infos_dir_name, *args):
+    job_script_file_path = os.path.join(scripts_base_dir_name, '{0}.py'.format(job_name))
     arguments = [
         'python',
-        job_script_filepath,
+        job_script_file_path,
         '--callback-url', callback_url,
         project_id,
-        cache_dirname
+        process_infos_dir_name
         ]
     arguments.extend(args)
     job_process = subprocess.Popen(arguments)
+    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(project_id))
     with open(lock_file_path, 'w') as lock_file:
         lock_file.write(unicode(job_process.pid))
     return job_process.pid

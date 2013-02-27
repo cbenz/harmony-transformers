@@ -9,6 +9,11 @@ import sys
 import urllib2
 
 
+u"""
+Create a new database for an Harmony project.
+"""
+
+
 def generate_createdb_script(project_id, user):
     db_create_template = u"""
 set -xe
@@ -30,23 +35,23 @@ set +x
     return template.substitute(mapping)
 
 
-def main(args=None):
-    if args is None:
-        args = sys.argv[1:]
-    parser = argparse.ArgumentParser(description=u'Create a new database for an Harmony project.')
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('project_id')
-    parser.add_argument('user')
+    parser.add_argument('db_user')
     parser.add_argument('--callback-url')
-    arguments = parser.parse_args(args)
-    bash_process = subprocess.Popen(['bash'], stdin=subprocess.PIPE)
+    args = parser.parse_args()
+
+    process = subprocess.Popen(['bash'], stdin=subprocess.PIPE)
     createdb_script = generate_createdb_script(
-        project_id=arguments.project_id,
-        user=arguments.user,
+        project_id=args.project_id,
+        user=args.db_user,
         )
-    stdoutdata, stderrdata = bash_process.communicate(input=createdb_script)
-    print stdoutdata, stderrdata
-    if arguments.callback_url:
-        urllib2.urlopen(arguments.callback_url)
+    stdoutdata, stderrdata = process.communicate(input=createdb_script)
+
+    if args.callback_url:
+        urllib2.urlopen(args.callback_url)
+    return process.returncode
 
 
 if __name__ == '__main__':
