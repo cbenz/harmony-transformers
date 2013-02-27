@@ -27,6 +27,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'imposm >= 2.4.0',
+        'lxml >= 2.2.8',
         ],
     keywords='harmony osm gis data converters tile layer',
 #    license=u'http://www.fsf.org/licensing/licenses/agpl-3.0.html',

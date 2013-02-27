@@ -20,6 +20,7 @@ def main():
     parser.add_argument('process_infos_dir_name')
     parser.add_argument('ogr2osm_script_file_path')
     parser.add_argument('shapefile_file_path')
+    parser.add_argument('osm_data_output_file_path')
     parser.add_argument('--callback-url')
     args = parser.parse_args()
 
@@ -31,7 +32,7 @@ def main():
         stdout_file_path = os.path.join(args.process_infos_dir_name, u'{0}.stdout'.format(args.project_id))
         stdout_file = open(stdout_file_path, 'w')
     process = subprocess.Popen(
-        ['python', args.ogr2osm_script_file_path, args.shapefile_file_path],
+        ['python', args.ogr2osm_script_file_path, args.shapefile_file_path, '--output', args.osm_data_output_file_path],
         stderr = stderr_file,
         stdin = subprocess.PIPE,
         stdout = stdout_file,

@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+import argparse
+import os
+import sys
+import urllib2
+
+from lxml import etree
+from lxml.cssselect import CSSSelector
+
+import harmony_converters
+
+
+u"""
+Create imposm mapping file specifically for the OSM data file of each project.
+"""
+
+
+def extract_osm_data_tags(osm_data_file_path):
+    osm_data_element_tree = etree.parse(osm_data_file_path)
+    tags_selector = CSSSelector('tag')
+    return set(tag_element.get('k') for tag_element in tags_selector(osm_data_element_tree))
+
+
+def create_imposm_mapping_file(imposm_mapping_file_path, osm_data_tags):
+    template_file_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'imposm_mapping_template.py')
+    with open(template_file_path, 'r') as template_file:
+        template = template_file.read()
+    with open(imposm_mapping_file_path, 'w') as imposm_mapping_file:
+        imposm_mapping_file.write(
+            template.format(
+                fields=u'\n'.join(u'(\'{0}\', String()),'.format(key) for key in osm_data_tags),
+                unique_id_tag_key=harmony_converters.gis_unique_id_tag_key,
+                )
+            )
+    return None
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('project_id')
+    parser.add_argument('osm_data_file_path')
+    parser.add_argument('imposm_mapping_file_path')
+    parser.add_argument('--callback-url')
+    args = parser.parse_args()
+    osm_data_tags = extract_osm_data_tags(args.osm_data_file_path)
+    result = create_imposm_mapping_file(args.imposm_mapping_file_path, osm_data_tags)
+    if args.callback_url:
+        urllib2.urlopen(args.callback_url)
+    return 0 if result is None else 1
+
+
+if __name__ == '__main__':
+    sys.exit(main())
