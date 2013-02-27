@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 
@@ -53,6 +53,9 @@ def main():
     with open(status_file_path, 'w') as status_file:
         status_file.write(str(job_process.returncode))
 
+    if os.path.isfile(lock_file_path):
+        os.unlink(lock_file_path)
+
     try:
         response = urllib2.urlopen(args.callback_url)
     except urllib2.HTTPError, response:
@@ -61,11 +64,6 @@ def main():
             args.callback_url,
             ))
         raise
-    log.info('Callback URL returned {0} code'.format(response.code))
-
-    if os.path.isfile(lock_file_path):
-        os.unlink(lock_file_path)
-        log.info('Lock file {0} removed'.format(lock_file_path))
     return 0
 
 
