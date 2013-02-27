@@ -6,12 +6,15 @@ import signal
 import subprocess
 
 
-def get_status(project_id, base_dirname):
-    lock_file_path = os.path.join(base_dirname, 'cache', 'locks', project_id)
+scripts_base_dirname = os.path.join(os.path.dirname(__file__), '..', 'scripts')
+
+
+def get_status(project_id, cache_dirname):
+    lock_file_path = os.path.join(cache_dirname, 'locks', project_id)
     if os.path.isfile(lock_file_path):
         return 'RUNNING'
     else:
-        status_file_path = os.path.join(base_dirname, 'cache', 'statuses', project_id)
+        status_file_path = os.path.join(cache_dirname, 'statuses', project_id)
         if not os.path.isfile(status_file_path):
             return 'Job not found'
         status_file = open(status_file_path, 'r')
@@ -22,8 +25,8 @@ def get_status(project_id, base_dirname):
         return 'STOPPED'
 
 
-def kill(project_id, base_dirname):
-    lock_file_path = os.path.join(base_dirname, 'cache', 'locks', project_id)
+def kill(project_id, cache_dirname):
+    lock_file_path = os.path.join(cache_dirname, 'locks', project_id)
     if not os.path.isfile(lock_file_path):
         return 'Job not found'
     with open(lock_file_path, 'r') as lock_file:
@@ -38,15 +41,15 @@ def kill(project_id, base_dirname):
     return 1
 
 
-def start(job_name, project_id, callback_url, base_dirname, *args):
-    job_script_filepath = os.path.join(base_dirname, 'scripts', '{0}.py'.format(job_name))
-    lock_file_path = os.path.join(base_dirname, 'cache', 'locks', project_id)
+def start(job_name, project_id, callback_url, cache_dirname, *args):
+    job_script_filepath = os.path.join(scripts_base_dirname, '{0}.py'.format(job_name))
+    lock_file_path = os.path.join(cache_dirname, 'locks', project_id)
     arguments = [
         'python',
         job_script_filepath,
         '--callback-url', callback_url,
         project_id,
-        base_dirname
+        cache_dirname
         ]
     arguments.extend(args)
     job_process = subprocess.Popen(arguments)

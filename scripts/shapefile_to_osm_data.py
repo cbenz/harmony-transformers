@@ -22,7 +22,7 @@ def main():
     parser = argparse.ArgumentParser(description = __doc__)
     parser.add_argument('project_id', help = "Project ID sequence")
     parser.add_argument('--callback-url', help = "Callback URL")
-    parser.add_argument('base_dirname', help = "Path to cache directory")
+    parser.add_argument('cache_dirname', help = "Path to cache directory")
     parser.add_argument('ogr2osm_script', help = "Path to shapefile file")
     parser.add_argument('shapefile', help = "Path to shapefile file")
     parser.add_argument('-v', '--verbose', action = 'store_true', help = 'increase output verbosity')
@@ -30,8 +30,8 @@ def main():
     args = parser.parse_args()
     logging.basicConfig(level = logging.DEBUG if args.verbose else logging.WARNING, stream = sys.stdout)
 
-    output_file = open(os.path.join(args.base_dirname, 'cache', 'stdout', args.project_id), 'w')
-    error_file = open(os.path.join(args.base_dirname, 'cache', 'stderr', args.project_id), 'w')
+    output_file = open(os.path.join(args.cache_dirname, 'stdout', args.project_id), 'w')
+    error_file = open(os.path.join(args.cache_dirname, 'stderr', args.project_id), 'w')
 
     job_process = subprocess.Popen(
         ['python', args.ogr2osm_script, args.shapefile],
@@ -43,13 +43,13 @@ def main():
     output_file.close()
     error_file.close()
 
-    lock_file_path = os.path.join(args.base_dirname, 'cache', 'locks', args.project_id)
+    lock_file_path = os.path.join(args.cache_dirname, 'locks', args.project_id)
     with open(lock_file_path, 'w') as lock_file:
         lock_file.write(str(job_process.pid))
 
     job_process.wait()
 
-    status_file_path = os.path.join(args.base_dirname, 'cache', 'statuses', args.project_id)
+    status_file_path = os.path.join(args.cache_dirname, 'statuses', args.project_id)
     with open(status_file_path, 'w') as status_file:
         status_file.write(str(job_process.returncode))
 
