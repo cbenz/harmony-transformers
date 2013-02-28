@@ -46,10 +46,16 @@ def main():
     parser.add_argument('db_password')
     parser.add_argument('--callback-url')
     args = parser.parse_args()
+
+    assert os.path.isdir(args.process_infos_dir_name)
+    assert os.path.isdir(args.carto_project_dir_name)
+    assert os.path.isfile(args.carto_script_file_path)
+
     result = build_carto_project(
         args.project_id, args.carto_project_dir_name, args.db_user, args.db_password, args.carto_script_file_path,
         )
-    if args.callback_url:
+
+    if args.callback_url is not None:
         urllib2.urlopen(args.callback_url)
     return result
 

@@ -3,6 +3,7 @@
 
 
 import argparse
+import os
 import subprocess
 import sys
 import urllib2
@@ -40,6 +41,8 @@ def main():
     parser.add_argument('--callback-url')
     args = parser.parse_args()
 
+    assert os.path.isdir(args.process_infos_dir_name)
+
     process = subprocess.Popen(['bash'], stdin=subprocess.PIPE)
     createdb_script = generate_createdb_script(
         project_id=args.project_id,
@@ -47,7 +50,7 @@ def main():
         )
     stdoutdata, stderrdata = process.communicate(input=createdb_script)
 
-    if args.callback_url:
+    if args.callback_url is not None:
         urllib2.urlopen(args.callback_url)
     return process.returncode
 
