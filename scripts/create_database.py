@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
+u"""
+Create a new database for an Harmony project.
+"""
+
+
 import argparse
 import os
 import subprocess
@@ -9,9 +14,7 @@ import sys
 import urllib2
 
 
-u"""
-Create a new database for an Harmony project.
-"""
+job_name = os.path.splitext(os.path.basename(__file__))[0]
 
 
 def generate_createdb_script(project_id, user):
@@ -48,11 +51,17 @@ def main():
         project_id=args.project_id,
         user=args.db_user,
         )
-    stdoutdata, stderrdata = process.communicate(input=createdb_script)
+    process.communicate(input=createdb_script)
 
     if args.callback_url is not None:
+        return_code_file_path = os.path.join(args.process_infos_dir_name, u'{0}.returncode'.format(job_name))
+        with open(return_code_file_path, 'w') as return_code_file:
+            return_code_file.write(str(process.returncode))
+        lock_file_path = os.path.join(args.process_infos_dir_name, u'{0}.lock'.format(job_name))
+        os.unlink(lock_file_path)
         urllib2.urlopen(args.callback_url)
-    return process.returncode
+
+    return 0
 
 
 if __name__ == '__main__':

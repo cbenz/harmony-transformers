@@ -49,7 +49,10 @@ def start(job_name, project_id, callback_url, process_infos_dir_name, *args):
         process_infos_dir_name
         ]
     arguments.extend(args)
-    job_process = subprocess.Popen(arguments)
+    stderr_file_path = os.path.join(process_infos_dir_name, u'{0}.stderr'.format(job_name))
+    stdout_file_path = os.path.join(process_infos_dir_name, u'{0}.stdout'.format(job_name))
+    with open(stderr_file_path, 'w') as stderr_file, open(stdout_file_path, 'w') as stdout_file:
+        job_process = subprocess.Popen(arguments, stderr=stderr_file, stdout=stdout_file)
     lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(job_name))
     with open(lock_file_path, 'w') as lock_file:
         lock_file.write(unicode(job_process.pid))

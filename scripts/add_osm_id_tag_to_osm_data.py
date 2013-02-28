@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
+u"""
+Add an artificial osm_id tag to each element.
+"""
+
+
 import argparse
 import os
 import sys
@@ -13,9 +18,7 @@ from lxml.cssselect import CSSSelector
 import harmony_converters
 
 
-u"""
-Add an artificial osm_id tag to each element.
-"""
+job_name = os.path.splitext(os.path.basename(__file__))[0]
 
 
 def add_osm_id_tag_to_osm_data(osm_data_input_file_path, osm_data_output_file_path):
@@ -43,6 +46,11 @@ def main():
     result = add_osm_id_tag_to_osm_data(args.osm_data_input_file_path, args.osm_data_output_file_path)
 
     if args.callback_url is not None:
+        return_code_file_path = os.path.join(args.process_infos_dir_name, u'{0}.returncode'.format(job_name))
+        with open(return_code_file_path, 'w') as return_code_file:
+            return_code_file.write(str(result or 0))
+        lock_file_path = os.path.join(args.process_infos_dir_name, u'{0}.lock'.format(job_name))
+        os.unlink(lock_file_path)
         urllib2.urlopen(args.callback_url)
     return 0 if result is None else 1
 

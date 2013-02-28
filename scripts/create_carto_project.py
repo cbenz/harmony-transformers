@@ -2,6 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
+u"""
+Build a carto project to generate tiles with.
+"""
+
+
 import argparse
 import os
 import shutil
@@ -10,9 +15,7 @@ import sys
 import urllib2
 
 
-u"""
-Build a carto project to generate tiles with.
-"""
+job_name = os.path.splitext(os.path.basename(__file__))[0]
 
 
 def build_carto_project(project_id, carto_project_dir_name, db_user, db_password, carto_script_file_path):
@@ -56,7 +59,13 @@ def main():
         )
 
     if args.callback_url is not None:
+        return_code_file_path = os.path.join(args.process_infos_dir_name, u'{0}.returncode'.format(job_name))
+        with open(return_code_file_path, 'w') as return_code_file:
+            return_code_file.write(str(result or 0))
+        lock_file_path = os.path.join(args.process_infos_dir_name, u'{0}.lock'.format(job_name))
+        os.unlink(lock_file_path)
         urllib2.urlopen(args.callback_url)
+
     return result
 
 
