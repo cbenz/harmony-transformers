@@ -6,7 +6,7 @@ import signal
 import subprocess
 
 
-scripts_base_dir_name = os.path.join(os.path.dir_name(__file__), '..', 'scripts')
+scripts_base_dir_name = os.path.join(os.path.dirname(__file__), '..', 'scripts')
 
 
 def get_status(project_id, process_infos_dir_name):
