@@ -17,8 +17,8 @@ def generate_createdb_script(project_id, user):
     db_create_template = u"""
 set -xe
 createdb -E UTF8 -O {user} -U {user} -h localhost {database}
-psql -U {user} -h localhost -d {database} -f {postgis_sql}
-psql -U {user} -h localhost -d {database} -f {spatial_ref_sys_sql}
+psql -U {user} -h localhost -d {database} -f {postgis_sql} > /dev/null
+psql -U {user} -h localhost -d {database} -f {spatial_ref_sys_sql} > /dev/null
 echo "ALTER TABLE geometry_columns OWNER TO {user}; ALTER TABLE spatial_ref_sys OWNER TO {user};" | \
     psql -U {user} -h localhost -d {database}
 set +x
