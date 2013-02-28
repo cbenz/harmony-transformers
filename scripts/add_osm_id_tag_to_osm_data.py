@@ -30,6 +30,7 @@ def add_osm_id_tag_to_osm_data(input_osm_data_file_path, output_osm_data_file_pa
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('project_id')
+    parser.add_argument('process_infos_dir_name')
     parser.add_argument('input_osm_data_file_path')
     parser.add_argument('output_osm_data_file_path')
     parser.add_argument('--callback-url')

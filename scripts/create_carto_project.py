@@ -33,6 +33,7 @@ def build_carto_project(project_id, carto_project_dir_name, db_user, db_password
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('project_id')
+    parser.add_argument('process_infos_dir_name')
     parser.add_argument('carto_project_dir_name')
     parser.add_argument('db_user')
     parser.add_argument('db_password')

@@ -35,6 +35,7 @@ set +x
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('project_id')
+    parser.add_argument('process_infos_dir_name')
     parser.add_argument('db_user')
     parser.add_argument('--callback-url')
     args = parser.parse_args()

@@ -41,6 +41,7 @@ def create_imposm_mapping_file(imposm_mapping_file_path, osm_data_tags):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('project_id')
+    parser.add_argument('process_infos_dir_name')
     parser.add_argument('osm_data_file_path')
     parser.add_argument('imposm_mapping_file_path')
     parser.add_argument('--callback-url')
