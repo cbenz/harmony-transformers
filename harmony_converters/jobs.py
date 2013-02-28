@@ -9,12 +9,12 @@ import subprocess
 scripts_base_dir_name = os.path.join(os.path.dirname(__file__), '..', 'scripts')
 
 
-def get_status(project_id, process_infos_dir_name):
-    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(project_id))
+def get_status(job_name, process_infos_dir_name):
+    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(job_name))
     if os.path.isfile(lock_file_path):
         return 'RUNNING'
     else:
-        return_code_file_path = os.path.join(process_infos_dir_name, u'{0}.returncode'.format(project_id))
+        return_code_file_path = os.path.join(process_infos_dir_name, u'{0}.returncode'.format(job_name))
         if not os.path.isfile(return_code_file_path):
             return 'NOT_FOUND'
         with open(return_code_file_path, 'r') as return_code_file:
@@ -22,8 +22,8 @@ def get_status(project_id, process_infos_dir_name):
         return 'COMPLETED' if return_code == 0 else 'ERROR'
 
 
-def kill(project_id, process_infos_dir_name):
-    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(project_id))
+def kill(job_name, process_infos_dir_name):
+    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(job_name))
     if not os.path.isfile(lock_file_path):
         return None
     with open(lock_file_path, 'r') as lock_file:
@@ -50,7 +50,7 @@ def start(job_name, project_id, callback_url, process_infos_dir_name, *args):
         ]
     arguments.extend(args)
     job_process = subprocess.Popen(arguments)
-    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(project_id))
+    lock_file_path = os.path.join(process_infos_dir_name, u'{0}.lock'.format(job_name))
     with open(lock_file_path, 'w') as lock_file:
         lock_file.write(unicode(job_process.pid))
     return job_process.pid
