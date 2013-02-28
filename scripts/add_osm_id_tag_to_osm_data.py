@@ -36,7 +36,8 @@ def main():
     parser.add_argument('--callback-url')
     args = parser.parse_args()
     result = add_osm_id_tag_to_osm_data(args.input_osm_data_file_path, args.output_osm_data_file_path)
-    if args.callback_url:
+
+    if args.callback_url is not None:
         urllib2.urlopen(args.callback_url)
     return 0 if result is None else 1
 

@@ -22,16 +22,6 @@ from harmony_converters import jobs
 
 # Loaded from INI file in main function.
 config = None
-
-job_name_order_list = [
-    'shapefile_to_osm_data',
-    'create_database',
-    'add_osm_id_tag_to_osm_data',
-    'create_imposm_mapping',
-    'import_osm_data',
-    'create_carto_project',
-    ]
-
 job_argument_config_keys_by_job_name = {
     'add_osm_id_tag_to_osm_data': [
         'osm_data_file_path',
@@ -63,6 +53,14 @@ job_argument_config_keys_by_job_name = {
         'osm_data_file_path',
         ]
     }
+job_name_order_list = [
+    'shapefile_to_osm_data',
+    'create_database',
+    'add_osm_id_tag_to_osm_data',
+    'create_imposm_mapping',
+    'import_osm_data',
+    'create_carto_project',
+    ]
 
 
 def create_project_structure():
@@ -86,23 +84,22 @@ def job_completed(req):
         if next_job_index < len(job_name_order_list):
             next_job_name = job_name_order_list[next_job_index]
         else:
-            next_job_name = None
-            print u'End of jobs cascade reached.'
-    if next_job_name is not None:
-        print u'next_job_name = ', next_job_name
-        job_default_params = [
-            next_job_name,
-            config['project_id'],
-            'http://localhost:6666/?caller_job_name={0}'.format(next_job_name),
-            config['process_infos_dir_name'],
-            ]
-        job_specific_params = [
-            config[job_argument]
-            for job_argument in job_argument_config_keys_by_job_name[next_job_name]
-            ]
-        job_params = job_default_params + job_specific_params
-        print u'job_params', job_params
-        jobs.start(*job_params)
+            print u'====== End of jobs cascade reached. CTRL-C to exit.'
+            return None
+    print u'next_job_name = ', next_job_name
+    job_default_params = [
+        next_job_name,
+        config['project_id'],
+        'http://localhost:6666/?caller_job_name={0}'.format(next_job_name),
+        config['process_infos_dir_name'],
+        ]
+    job_specific_params = [
+        config[job_argument]
+        for job_argument in job_argument_config_keys_by_job_name[next_job_name]
+        ]
+    job_params = job_default_params + job_specific_params
+    print u'job_params', job_params
+    jobs.start(*job_params)
     return None
 
 
@@ -115,9 +112,10 @@ def main():
     global config
     config = dict(config_parser.items('harmony_project'))
     create_project_structure()
-    httpd = make_server('', 6666, job_completed)
-    print u'Open URL http://localhost:6666/ to start the jobs cascade.'
-    httpd.serve_forever()
+    global http_server
+    http_server = make_server('', 6666, job_completed)
+    print u'====== Open URL http://localhost:6666/ to start the jobs cascade.'
+    http_server.serve_forever()
     return 0
 
 
