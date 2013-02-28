@@ -1,0 +1,55 @@
+{{
+  "bounds": [
+    -180,
+    -85.05112877980659,
+    180,
+    85.05112877980659
+  ],
+  "center": [
+    0,
+    0,
+    2
+  ],
+  "format": "png",
+  "interactivity": false,
+  "minzoom": 0,
+  "maxzoom": 22,
+  "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
+  "Stylesheet": [
+    "style.mss"
+  ],
+  "Layer": [
+    {{
+      "geometry": "point",
+      "extent": [
+        -4.622348161999991,
+        48.33723015999999,
+        -4.363704541000012,
+        48.46093886999997
+      ],
+      "Datasource": {{
+        "type": "postgis",
+        "table": "osm_nodes",
+        "key_field": "osm_id",
+        "geometry_field": "geometry",
+        "extent_cache": "auto",
+        "extent": "-514557.443663063,6163142.41492699,-485765.367476417,6183884.10575475",
+        "host": "localhost",
+        "port": "5432",
+        "user": "{db_user}",
+        "password": "{db_password}",
+        "dbname": "{project_id}"
+      }},
+      "id": "nodes",
+      "class": "",
+      "srs-name": "900913",
+      "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
+      "advanced": {{}},
+      "name": "nodes"
+    }}
+  ],
+  "scale": 1,
+  "metatile": 2,
+  "name": "{project_id}",
+  "description": "{project_id}"
+}}
