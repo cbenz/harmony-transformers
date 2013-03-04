@@ -7,4 +7,4 @@ clean:
 	rm -rf cache/*
 
 flake8:
-	flake8 --max-line-length=120 --ignore=E123,E128,E251 harmony_converters scripts
+	flake8 --max-line-length=120 --ignore=E123,E128,E251 harmony_transformers scripts

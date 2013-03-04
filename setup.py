@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-"""Data converters for the OSM-GIS-Harmony project."""
+"""Data transformers for the OSM-GIS-Harmony project."""
 
 
 from setuptools import setup, find_packages
@@ -29,10 +29,10 @@ setup(
         'imposm >= 2.4.0',
         'lxml >= 2.2.8',
         ],
-    keywords='harmony osm gis data converters tile layer',
+    keywords='harmony osm gis data transformers tile layer',
 #    license=u'http://www.fsf.org/licensing/licenses/agpl-3.0.html',
     long_description='\n'.join(doc_lines[2:]),
-    name=u'harmony_converters',
+    name=u'harmony_transformers',
     packages=find_packages(),
     url=u'',
     version='0.1',

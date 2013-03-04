@@ -3,7 +3,7 @@
 
 
 u"""
-Run all converters, starting with a Shapefile and ending with a tile layer.
+Run all transformers, starting with a Shapefile and ending with a tile layer.
 Callback URL targets a minimalist HTTP server.
 """
 
@@ -17,7 +17,7 @@ import sys
 from webob.dec import wsgify
 from wsgiref.simple_server import make_server
 
-from harmony_converters import jobs
+from harmony_transformers import jobs
 
 
 # Loaded from INI file in main function.

@@ -1,7 +1,7 @@
-harmony-converters
+harmony-transformers
 ==================
 
-Data converters for the OSM-GIS-Harmony project.
+Data transformers for the OSM-GIS-Harmony project.
 
 Dependencies
 ------------
