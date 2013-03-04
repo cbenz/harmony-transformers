@@ -22,10 +22,10 @@
     {{
       "geometry": "point",
       "extent": [
-        -4.622348161999991,
-        48.33723015999999,
-        -4.363704541000012,
-        48.46093886999997
+        -4.568925940999997,
+        48.35720816199997,
+        -4.430281336999989,
+        48.45955407499998
       ],
       "Datasource": {{
         "type": "postgis",
@@ -33,7 +33,7 @@
         "key_field": "osm_id",
         "geometry_field": "geometry",
         "extent_cache": "auto",
-        "extent": "-514557.443663063,6163142.41492699,-485765.367476417,6183884.10575475",
+        "extent": "-508610.509224298,6166488.62545781,-493176.662505782,6183651.64385833",
         "host": "localhost",
         "port": "5432",
         "user": "{db_user}",
@@ -46,6 +46,34 @@
       "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
       "advanced": {{}},
       "name": "nodes"
+    }},
+    {{
+      "geometry": "linestring",
+      "extent": [
+        -4.568926008060518,
+        48.35720808969283,
+        -4.430281366762576,
+        48.45955406110756
+      ],
+      "Datasource": {{
+        "type": "postgis",
+        "table": "osm_ways",
+        "key_field": "osm_id",
+        "geometry_field": "geometry",
+        "extent_cache": "auto",
+        "extent": "-508610.516689441,6166488.61334437,-493176.665818938,6183651.64152628",
+        "host": "localhost",
+        "port": "5432",
+        "user": "{db_user}",
+        "password": "{db_password}",
+        "dbname": "{project_id}"
+      }},
+      "id": "ways",
+      "class": "",
+      "srs-name": "900913",
+      "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
+      "advanced": {{}},
+      "name": "ways"
     }}
   ],
   "scale": 1,
