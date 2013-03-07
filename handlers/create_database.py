@@ -7,14 +7,10 @@ Create a new database for an Harmony project.
 """
 
 
-import argparse
-import os
+import json
 import subprocess
-import sys
+import urllib
 import urllib2
-
-
-job_name = os.path.splitext(os.path.basename(__file__))[0]
 
 
 def generate_createdb_script(project_id, user):
@@ -36,33 +32,29 @@ set +x
         )
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('project_id')
-    parser.add_argument('process_infos_dir_name')
-    parser.add_argument('db_user')
-    parser.add_argument('--callback-url')
-    args = parser.parse_args()
-
-    assert os.path.isdir(args.process_infos_dir_name)
-
+def create_database(handler_conf, event_name, event_parameters):
     process = subprocess.Popen(['bash'], stdin=subprocess.PIPE)
     createdb_script = generate_createdb_script(
-        project_id=args.project_id,
-        user=args.db_user,
+        project_id=event_parameters['project_id'],
+        user=handler_conf['projects_databases.user'],
         )
     process.communicate(input=createdb_script)
+    assert process.returncode == 0
+    emit_url_data = {
+        'event_name': 'database:ready',
+        'event_parameters': json.dumps({
+            'project_id': event_parameters['project_id'],
+            }),
+        }
+    urllib2.urlopen(handler_conf['webrokeit.urls.emit'], urllib.urlencode(emit_url_data))
+    return None
 
-    if args.callback_url is not None:
-        return_code_file_path = os.path.join(args.process_infos_dir_name, u'{0}.returncode'.format(job_name))
-        with open(return_code_file_path, 'w') as return_code_file:
-            return_code_file.write(str(process.returncode))
-        lock_file_path = os.path.join(args.process_infos_dir_name, u'{0}.lock'.format(job_name))
-        os.unlink(lock_file_path)
-        urllib2.urlopen(args.callback_url)
 
-    return 0
-
-
-if __name__ == '__main__':
-    sys.exit(main())
+def register_handler(handler_conf):
+    subscribe_url_data = {
+        'event_name': 'shapefile:ready',
+        'function_name': 'create_database',
+        'script_name': handler_conf['handler_file'],
+        }
+    urllib2.urlopen(handler_conf['webrokeit.urls.subscribe'], urllib.urlencode(subscribe_url_data))
+    return None

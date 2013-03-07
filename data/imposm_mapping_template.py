@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from imposm.mapping import LineStrings, LocalizedName, Options, Points, set_default_name_type, String
+from imposm.mapping import LineStrings, Options, Points, String
 
 
 db_conf = Options(
