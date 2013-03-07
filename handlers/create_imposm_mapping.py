@@ -14,8 +14,6 @@ import urllib2
 from lxml import etree
 from lxml.cssselect import CSSSelector
 
-import harmony_transformers
-
 
 def extract_osm_data_tags(osm_data_input_file_path):
     osm_data_element_tree = etree.parse(osm_data_input_file_path)
@@ -34,7 +32,7 @@ def create_imposm_mapping(handler_conf, event_name, event_parameters):
         imposm_mapping_file.write(
             template.format(
                 fields=u'\n'.join(u'(\'{0}\', String()),'.format(key) for key in osm_data_tags),
-                unique_id_tag_key=harmony_transformers.gis_unique_id_tag_key,
+                unique_id_tag_key=handler_conf['gis_unique_id_tag_key'],
                 )
             )
     emit_url_data = {

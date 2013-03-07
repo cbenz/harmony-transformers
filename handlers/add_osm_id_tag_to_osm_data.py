@@ -15,14 +15,12 @@ import urllib2
 from lxml import etree
 from lxml.cssselect import CSSSelector
 
-import harmony_transformers
-
 
 def add_osm_id_tag_to_osm_data(handler_conf, event_name, event_parameters):
     input_osm_data_element_tree = etree.parse(event_parameters['file_path'])
     element_selector = CSSSelector('node, relation, way')
     for element in element_selector(input_osm_data_element_tree):
-        etree.SubElement(element, 'tag', k=harmony_transformers.gis_unique_id_tag_key, v=element.get('id'))
+        etree.SubElement(element, 'tag', k=handler_conf['gis_unique_id_tag_key'], v=element.get('id'))
     output_osm_data_file_path = u'{0}_with_osm_id_tag{1}'.format(*os.path.splitext(event_parameters['file_path']))
     with open(output_osm_data_file_path, 'w') as output_osm_data_file:
         output_osm_data_file.write(etree.tostring(input_osm_data_element_tree))
