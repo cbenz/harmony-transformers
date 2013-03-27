@@ -13,6 +13,9 @@ import urllib
 import urllib2
 
 
+display_name = _(u'Create database')
+
+
 def generate_createdb_script(project_id, user):
     db_create_template = u"""
 set -xe

@@ -15,6 +15,9 @@ import urllib2
 import imposm.app
 
 
+display_name = _(u'Import OSM data')
+
+
 def check_all_events_received(handler_conf, state_document_list):
     expected_event_name_list = ['database:ready', 'imposm_mapping:ready', 'osm_data:osm_id_tag:ready']
     received_event_name_list = [

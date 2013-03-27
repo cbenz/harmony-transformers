@@ -16,6 +16,9 @@ from lxml import etree
 from lxml.cssselect import CSSSelector
 
 
+display_name = _(u'Post-process OSM data')
+
+
 def add_osm_id_tag_to_osm_data(handler_conf, event_name, event_parameters):
     input_osm_data_element_tree = etree.parse(event_parameters['file_path'])
     element_selector = CSSSelector('node, relation, way')

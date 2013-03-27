@@ -15,6 +15,9 @@ import urllib
 import urllib2
 
 
+display_name = _(u'Create tile layer')
+
+
 def create_carto_project(handler_conf, event_name, event_parameters):
     project_dir_path = os.path.join(handler_conf['projects_base_dir'], event_parameters['project_id'])
     assert os.path.isdir(project_dir_path)

@@ -13,6 +13,9 @@ import urllib
 import urllib2
 
 
+display_name = _(u'Convert shapefile to OSM data')
+
+
 def register_handler(handler_conf):
     subscribe_url_data = {
         'event_name': 'shapefile:ready',

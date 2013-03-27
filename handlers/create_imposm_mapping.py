@@ -15,6 +15,9 @@ from lxml import etree
 from lxml.cssselect import CSSSelector
 
 
+display_name = _(u'Create files needed for OSM data import')
+
+
 def extract_osm_data_tags(osm_data_input_file_path):
     osm_data_element_tree = etree.parse(osm_data_input_file_path)
     tags_selector = CSSSelector('tag')
