@@ -30,7 +30,7 @@ def emit_shapefile_ready(handler_conf, project_id, shapefile_file_path):
         'event_parameters': json.dumps(event_parameters),
         }
     urllib2.urlopen(handler_conf['webrokeit.urls.emit'], urllib.urlencode(emit_url_data))
-    log.debug(u'Event "my_event_1" emitted with parameters: {0}.'.format(event_parameters))
+    log.debug(u'Event "shapefile:ready" emitted with parameters: {0}.'.format(event_parameters))
 
 
 def main():
