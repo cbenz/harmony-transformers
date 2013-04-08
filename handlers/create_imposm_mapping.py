@@ -14,8 +14,9 @@ import urllib2
 from lxml import etree
 from lxml.cssselect import CSSSelector
 
+N_ = lambda msg: msg
 
-display_name = _(u'Create files needed for OSM data import')
+display_name = N_(u'Create files needed for OSM data import')
 
 
 def extract_osm_data_tags(osm_data_input_file_path):

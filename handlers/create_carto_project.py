@@ -14,8 +14,9 @@ import subprocess
 import urllib
 import urllib2
 
+N_ = lambda msg: msg
 
-display_name = _(u'Create tile layer')
+display_name = N_(u'Create tile layer')
 
 
 def create_carto_project(handler_conf, event_name, event_parameters):

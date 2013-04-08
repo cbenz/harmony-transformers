@@ -12,8 +12,9 @@ import subprocess
 import urllib
 import urllib2
 
+N_ = lambda msg: msg
 
-display_name = _(u'Create database')
+display_name = N_(u'Create database')
 
 
 def generate_createdb_script(project_id, user):

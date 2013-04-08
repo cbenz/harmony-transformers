@@ -14,8 +14,9 @@ import urllib2
 
 import imposm.app
 
+N_ = lambda msg: msg
 
-display_name = _(u'Import OSM data')
+display_name = N_(u'Import OSM data')
 
 
 def check_all_events_received(handler_conf, state_document_list):

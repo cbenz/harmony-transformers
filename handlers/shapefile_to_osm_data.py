@@ -12,8 +12,9 @@ import os
 import urllib
 import urllib2
 
+N_ = lambda msg: msg
 
-display_name = _(u'Convert shapefile to OSM data')
+display_name = N_(u'Convert shapefile to OSM data')
 
 
 def register_handler(handler_conf):

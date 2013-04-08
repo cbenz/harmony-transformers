@@ -15,8 +15,9 @@ import urllib2
 from lxml import etree
 from lxml.cssselect import CSSSelector
 
+N_ = lambda msg: msg
 
-display_name = _(u'Post-process OSM data')
+display_name = N_(u'Post-process OSM data')
 
 
 def add_osm_id_tag_to_osm_data(handler_conf, event_name, event_parameters):
