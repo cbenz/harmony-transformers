@@ -3,7 +3,7 @@
 
 
 u"""
-Emit the shapefile:ready event.
+Emit the shapefile:archive:ready event.
 """
 
 
@@ -20,24 +20,24 @@ import urllib2
 log = logging.getLogger(os.path.basename(__file__))
 
 
-def emit_shapefile_ready(handler_conf, project_id, shapefile_file_path):
+def emit_shapefile_archive_ready(handler_conf, project_id, shapefile_archive_file_path):
     event_parameters = {
-        'file_path': shapefile_file_path,
+        'file_path': shapefile_archive_file_path,
         'project_id': project_id,
         }
     emit_url_data = {
-        'event_name': 'shapefile:ready',
+        'event_name': 'shapefile:archive:ready',
         'event_parameters': json.dumps(event_parameters),
         }
     urllib2.urlopen(handler_conf['webrokeit.urls.emit'], urllib.urlencode(emit_url_data))
-    log.debug(u'Event "shapefile:ready" emitted with parameters: {0}.'.format(event_parameters))
+    log.debug(u'Event "shapefile:archive:ready" emitted with parameters: {0}.'.format(event_parameters))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('handlers_ini')
     parser.add_argument('project_id')
-    parser.add_argument('shapefile')
+    parser.add_argument('shapefile_archive')
     parser.add_argument('-v', '--verbose', action='store_true', default=False, help=u'Display debug messages')
     args = parser.parse_args()
     assert os.path.isfile(args.handlers_ini)
@@ -46,9 +46,9 @@ def main():
         'here': os.path.dirname(os.path.abspath(args.handlers_ini)),
         })
     config_parser.read(args.handlers_ini)
-    handler_conf = dict(config_parser.items('shapefile_to_osm_data'))
-    shapefile_file_path = os.path.abspath(args.shapefile)
-    emit_shapefile_ready(handler_conf, args.project_id, shapefile_file_path)
+    handler_conf = dict(config_parser.items('create_project_tree'))
+    shapefile_archive_file_path = os.path.abspath(args.shapefile_archive)
+    emit_shapefile_archive_ready(handler_conf, args.project_id, shapefile_archive_file_path)
     return 0
 
 
