@@ -33,7 +33,7 @@ def unzip(path, dest_dir_path):
             fd = open(file_path, 'w')
             fd.write(zfile.read(name))
             fd.close()
-            if file_path.endswith('.shp'):
+            if shapefile is None and file_path.endswith('.shp'):
                 shapefile = file_path
     zfile.close()
     return shapefile
